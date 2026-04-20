@@ -28,7 +28,7 @@
     cursor: none;
   }
 
-  /* CURSOR */
+  /* CURSOR - Hidden on Mobile */
   .cursor {
     position: fixed;
     width: 8px; height: 8px;
@@ -41,6 +41,11 @@
     mix-blend-mode: difference;
   }
   .cursor.expand { width: 36px; height: 36px; }
+
+  @media (max-width: 768px) {
+    .cursor { display: none; }
+    html, body { cursor: auto; }
+  }
 
   /* NAV */
   nav {
@@ -71,6 +76,11 @@
     cursor: none;
   }
   .nav-links a:hover { opacity: 1; }
+
+  @media (max-width: 768px) {
+    nav { padding: 1.5rem; }
+    .nav-links { gap: 1rem; }
+  }
 
   /* PROGRESS DOTS */
   .progress-dots {
@@ -194,10 +204,20 @@
     border: 0.5px solid rgba(240,235,226,0.16);
     color: rgba(240,235,226,0.6);
   }
-  .tag-warm  { border-color: rgba(201,168,124,0.5); color: var(--warm); }
-  .tag-cold  { border-color: rgba(143,163,184,0.5); color: var(--cold); }
-  .tag-red   { border-color: rgba(217,53,53,0.5);   color: var(--red);  }
-  .tag-amber { border-color: rgba(201,125,58,0.5);  color: var(--amber);}
+
+  /* MOBILE MEDIA QUERY - Laptop stays the same, Phone stacks! */
+  @media (max-width: 768px) {
+    .slide-content {
+      flex-direction: column;
+      align-items: flex-start;
+      bottom: 2.5rem; left: 1.5rem; right: 1.5rem;
+    }
+    .slide-title { font-size: 3.5rem; line-height: 1; margin-bottom: 1rem; }
+    .slide-right { text-align: left; max-width: 100%; }
+    .slide-tags { justify-content: flex-start; }
+    .slide-num { display: none; }
+    #slide-0 .slide-title { font-size: 5.5rem !important; }
+  }
 
   /* HERO */
   #slide-0 .slide-content {
@@ -240,6 +260,9 @@
   #slide-5 .slide-content {
     align-items: center; bottom: auto;
     top: 50%; transform: translateY(-50%);
+  }
+  @media (max-width: 768px) {
+    #slide-5 .slide-content { top: 15%; transform: none; display: block; height: 80vh; overflow-y: auto; }
   }
   .about-title {
     font-family: 'Cormorant Garamond', serif;
@@ -290,34 +313,20 @@
     display: flex; align-items: center; justify-content: flex-end; gap: 0.6rem;
     cursor: none;
   }
-  .contact-links a::after { content: '→'; opacity: 0.5; transition: transform 0.3s; }
   .contact-links a:hover { opacity: 1; }
-  .contact-links a:hover::after { transform: translateX(4px); opacity: 1; }
 
-  /* WIPE */
+  /* WIPE ANIMATION */
   .wipe {
-    position: fixed; inset: 0;
-    background: var(--dark);
-    z-index: 500;
-    transform: scaleY(0);
-    transform-origin: bottom;
-    pointer-events: none;
+    position: fixed; inset: 0; background: var(--dark);
+    z-index: 500; transform: scaleY(0); transform-origin: bottom; pointer-events: none;
   }
   .wipe.out { animation: wipeOut 0.5s cubic-bezier(0.76, 0, 0.24, 1) forwards; }
   .wipe.in  { animation: wipeIn  0.5s cubic-bezier(0.76, 0, 0.24, 1) forwards; }
-  @keyframes wipeOut {
-    from { transform: scaleY(0); transform-origin: bottom; }
-    to   { transform: scaleY(1); transform-origin: bottom; }
-  }
-  @keyframes wipeIn {
-    from { transform: scaleY(1); transform-origin: top; }
-    to   { transform: scaleY(0); transform-origin: top; }
-  }
+  @keyframes wipeOut { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  @keyframes wipeIn { from { transform: scaleY(1); transform-origin: top; } to { transform: scaleY(0); transform-origin: top; } }
 
-  /* GRAIN */
   .grain {
-    position: fixed; inset: 0; z-index: 50;
-    pointer-events: none; opacity: 0.03;
+    position: fixed; inset: 0; z-index: 50; pointer-events: none; opacity: 0.03;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     background-size: 180px;
   }
@@ -327,6 +336,7 @@
     font-size: 0.58rem; letter-spacing: 0.12em; opacity: 0.15;
     z-index: 100; text-transform: uppercase;
   }
+  @media (max-width: 768px) { .footer-copy { left: 1.5rem; bottom: 1rem; } }
 </style>
 </head>
 <body>
@@ -355,11 +365,7 @@
 
 <div class="slides">
 
-  <!-- 0: HERO
-       ▸ Rename your hero video to hero.mp4 and put it next to this file
-         OR change src="hero.mp4" to your actual filename -->
   <div class="slide active" id="slide-0">
-    <!--<video class="slide-video" src="hero.mp4" autoplay muted loop playsinline preload="auto"></video>-->
     <div class="slide-overlay-center"></div>
     <div class="slide-num">00</div>
     <div class="slide-content">
@@ -369,8 +375,6 @@
     </div>
   </div>
 
-  <!-- 1: JAPANESE POST OFFICE
-       ▸ Change src to your actual mp4 filename, e.g. src="postoffice.mp4" -->
   <div class="slide" id="slide-1">
     <video class="slide-video" src="japa.mp4" muted loop playsinline preload="none"></video>
     <div class="slide-overlay"></div>
@@ -384,14 +388,12 @@
         <p class="slide-desc">A quiet rural scene caught in golden hour. Power lines, a red mailbox, wild grass. Every texture hand-crafted in Blender Cycles.</p>
         <div class="slide-tags">
           <span class="tag tag-warm">Blender Cycles</span>
-          <span class="tag tag-warm">Lighting</span>
           <span class="tag">Architectural</span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 2: SCI-FI HANGAR -->
   <div class="slide" id="slide-2">
     <video class="slide-video" src="scifi-hangar.mp4" muted loop playsinline preload="none"></video>
     <div class="slide-overlay"></div>
@@ -404,15 +406,13 @@
       <div class="slide-right">
         <p class="slide-desc">Cold steel, red neon. A lone soldier faces a hovering drone in deep space. Cinematic tension built through light and shadow.</p>
         <div class="slide-tags">
-          <span class="tag tag-red">Neon Lighting</span>
+          <span class="tag tag-red">Neon</span>
           <span class="tag tag-cold">Sci-Fi</span>
-          <span class="tag">Cinematic</span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 3: CAVE SANCTUM -->
   <div class="slide" id="slide-3">
     <video class="slide-video" src="cave-sanctum.mp4" muted loop playsinline preload="none"></video>
     <div class="slide-overlay"></div>
@@ -423,17 +423,15 @@
         <h2 class="slide-title">Abandoned<br>Temple</h2>
       </div>
       <div class="slide-right">
-        <p class="slide-desc">A explorer's POV entering an abandoned Temple.</p>
+        <p class="slide-desc">An explorer's POV entering an abandoned Temple.</p>
         <div class="slide-tags">
           <span class="tag tag-amber">Volumetrics</span>
-          <span class="tag tag-amber">Environment</span>
           <span class="tag">Atmosphere</span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 4: RETRO LIVING ROOM -->
   <div class="slide" id="slide-4">
     <video class="slide-video" src="retro-room.mp4" muted loop playsinline preload="none"></video>
     <div class="slide-overlay"></div>
@@ -447,36 +445,28 @@
         <p class="slide-desc">A warm, lived-in room from another era. Vintage TV, ceiling fan, afternoon light. Stillness rendered in detail.</p>
         <div class="slide-tags">
           <span class="tag tag-warm">Interior</span>
-          <span class="tag tag-warm">Nostalgia</span>
           <span class="tag">Materials</span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 5: ABOUT -->
   <div class="slide" id="slide-5">
     <div class="slide-bg-solid"></div>
     <div class="slide-content">
       <h2 class="about-title">A vision<br>before<br>a brief.</h2>
       <div class="about-body">
-        <p>I'm Izzah , a self-driven 3d Blender artist trying to convey her emotions through my animations, My work ranges from quiet nostalgic scenes to dark cinematic environments.</p>
-        <p>Every scene has a mood, a story, a reason to exist. Whether it's golden hour in rural Japan or the cold tension of a sci-fi hangar, I render worlds you can feel.</p>
-        <p>Currently seeking opportunities at a studio where vision is valued as much as technical skill.</p>
+        <p>I'm Izzah, a self-driven 3D artist conveying emotions through animations. My work ranges from quiet nostalgia to dark cinematic environments.</p>
         <div class="skills-row">
           <span class="skill">Blender</span>
-          <span class="skill">Cycles</span>
-          <span class="skill">EEVEE</span>
           <span class="skill">Lighting</span>
           <span class="skill">Texturing</span>
           <span class="skill">Animation</span>
-          <span class="skill">World Building</span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 6: CONTACT -->
   <div class="slide" id="slide-6">
     <div class="slide-bg-solid"></div>
     <div class="slide-content">
@@ -487,8 +477,6 @@
       <div class="contact-links">
         <a href="mailto:your@email.com">Email</a>
         <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
-        <a href="https://artstation.com/yourprofile" target="_blank">ArtStation</a>
-        <a href="https://instagram.com/yourprofile" target="_blank">Instagram</a>
       </div>
     </div>
   </div>
@@ -500,7 +488,6 @@
   let current = 0;
   let isAnimating = false;
 
-  // build dots
   const dotsEl = document.getElementById('dots');
   for (let i = 0; i < TOTAL; i++) {
     const d = document.createElement('div');
@@ -509,9 +496,7 @@
     dotsEl.appendChild(d);
   }
 
-  function getVideo(i) {
-    return document.querySelector('#slide-' + i + ' video');
-  }
+  function getVideo(i) { return document.querySelector('#slide-' + i + ' video'); }
 
   function goTo(index) {
     if (isAnimating || index === current || index < 0 || index >= TOTAL) return;
@@ -525,7 +510,6 @@
     wipe.className = 'wipe out';
     wipe.addEventListener('animationend', function h1() {
       wipe.removeEventListener('animationend', h1);
-
       prev.classList.remove('active');
       next.classList.add('active');
 
@@ -547,7 +531,6 @@
     });
   }
 
-  // scroll
   let wheelAccum = 0;
   window.addEventListener('wheel', e => {
     if (isAnimating) return;
@@ -558,13 +541,6 @@
     }
   }, { passive: true });
 
-  // keyboard
-  window.addEventListener('keydown', e => {
-    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') goTo(current + 1);
-    if (e.key === 'ArrowUp'   || e.key === 'ArrowLeft')  goTo(current - 1);
-  });
-
-  // touch
   let touchY = 0;
   window.addEventListener('touchstart', e => { touchY = e.touches[0].clientY; }, { passive: true });
   window.addEventListener('touchend', e => {
@@ -573,15 +549,10 @@
     if (Math.abs(dy) > 40) goTo(current + (dy > 0 ? 1 : -1));
   });
 
-  // cursor
   const cursor = document.getElementById('cursor');
   document.addEventListener('mousemove', e => {
     cursor.style.left = e.clientX + 'px';
     cursor.style.top  = e.clientY + 'px';
-  });
-  document.querySelectorAll('a, .dot').forEach(el => {
-    el.addEventListener('mouseenter', () => cursor.classList.add('expand'));
-    el.addEventListener('mouseleave', () => cursor.classList.remove('expand'));
   });
 </script>
 </body>
